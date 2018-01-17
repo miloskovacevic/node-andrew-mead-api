@@ -32,6 +32,8 @@ app.get('/todos', (req, res) => {
     })
 });
 
+console.log('nja');
+
 
 
 app.listen(3000, () => {
