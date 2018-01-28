@@ -40,11 +40,28 @@ app.get('/todos/:id', (req, res) => {
     Todo.findById(id)
         .then((todo) => {
             if (!todo) 
-                res.status(404).send();
+                return res.status(404).send();
             res.send({todo});
         }, (err) => {
             res.status(400).send();
         })
+})
+
+
+app.delete('/todos/:id', (req,res) => {
+    let id = req.params.id;
+
+    if (!ObjectId.isValid(id)) {
+        res.status(404).send();
+    }
+
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if (!todo)
+            return res.status(404).send();
+        res.status(200).send({todo});
+    }, (err) => {
+        res.status(400).send();
+    })
 })
 
 console.log('nja');
@@ -53,7 +70,7 @@ console.log('nja');
 
 app.listen(3000, () => {
     console.log('app listens on port 3000...');
-})
+});
 
 module.exports = { app }
 
