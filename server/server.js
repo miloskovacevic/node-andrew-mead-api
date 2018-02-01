@@ -1,4 +1,5 @@
 let env = process.env.NODE_ENV || 'development';
+
 console.log('env ********', env);
 if (env === 'development') {
     process.env.port = 3000;
@@ -14,10 +15,12 @@ const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 
+
 const { ObjectId} = require('mongodb');
 let { mongoose } = require('./db/mongoose');
 let { Todo } = require('./models/todo');
 let { User } = require('./models/user');
+let { authenticate } = require('./middleware/authenticate');
 
 let app = express();
 
@@ -33,9 +36,11 @@ app.post('/users', (req, res) => {
     }).then((token) => {
         res.header('x-auth', token).send(user)
     }).catch(e => res.status(400).send(e));
+});
 
-
-})
+app.get('/users/me', authenticate, (req, res) => {
+    res.send(req.user);
+});
 
 app.post('/todos', (req, res) => {
     console.log(req.body);
