@@ -8,22 +8,9 @@ const { ObjectId }  = require('mongodb');
 
 
 
-const todos = [{
-    _id: new ObjectId(),
-    text: 'first todo'
-},
-{
-    _id: new ObjectId(),    
-    text: 'second todo'
-}];
+const { todos, populateTodos} = require('./seed/seed');
 
-beforeEach((done) => {
-    Todo.remove({}).then(() => {
-        return Todo.insertMany(todos);
-    }).then(() => {
-         done();
-    })
-});
+beforeEach(populateTodos);
 
 
 describe('POST /todos', () => {
